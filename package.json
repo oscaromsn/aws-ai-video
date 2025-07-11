@@ -1,0 +1,18 @@
+{
+  "name": "aws-ai-video",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "@effect/ai": "^0.21.16",
+    "@effect/ai-amazon-bedrock": "^0.1.13",
+    "@effect/platform": "^0.87.12",
+    "@effect/platform-bun": "^0.72.17",
+    "effect": "^3.16.12"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.8.3"
+  }
+}
