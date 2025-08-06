@@ -39,12 +39,11 @@ class ICanHazDadJoke extends Effect.Service<ICanHazDadJoke>()("ICanHazDadJoke", 
       function* (searchTerm: string) {
         return yield* httpClientOk.get("/search", {
           acceptJson: true,
-          urlParams: { searchTerm }
+          urlParams: { term: searchTerm }
         }).pipe(
           Effect.flatMap(HttpClientResponse.schemaBodyJson(SearchResponse)),
           Effect.flatMap(({ results }) => Array.head(results)),
           Effect.map((joke) => joke.joke),
-          Effect.scoped,
           Effect.orDie
         )
       }
@@ -67,10 +66,16 @@ const DadJokeToolHandlers = DadJokeTools.toLayer(
 
 const program = Effect.gen(function* () {
   const response = yield* AiLanguageModel.generateText({
-    prompt: "Generate a dad joke about pirates",
+    prompt: "Generate a dad joke about scientists",
     toolkit: DadJokeTools
   })
-  console.log(response.results)
+  if (response.finishReason === "tool-calls") {
+    const nextResponse = yield* AiLanguageModel.generateText({
+      prompt: response,
+      toolkit: DadJokeTools
+    })
+    console.log(nextResponse.text)
+  }
 }).pipe(Effect.provide(AmazonBedrockLanguageModel.model("us.anthropic.claude-sonnet-4-20250514-v1:0")))
 
 const AmazonBedrock = AmazonBedrockClient.layerConfig({

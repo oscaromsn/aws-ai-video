@@ -39,12 +39,11 @@ class ICanHazDadJoke extends Effect.Service<ICanHazDadJoke>()("ICanHazDadJoke", 
       function* (searchTerm: string) {
         return yield* httpClientOk.get("/search", {
           acceptJson: true,
-          urlParams: { searchTerm }
+          urlParams: { term: searchTerm }
         }).pipe(
           Effect.flatMap(HttpClientResponse.schemaBodyJson(SearchResponse)),
           Effect.flatMap(({ results }) => Array.head(results)),
           Effect.map((joke) => joke.joke),
-          Effect.scoped,
           Effect.orDie
         )
       }

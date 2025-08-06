@@ -38,5 +38,11 @@ program.pipe(
   Effect.retry({
     times: 10,
     schedule: Schedule.exponential(1.5)
-  })
+  }),
+  // Because Effect programs are evaluated lazily, nothing
+  // will happen until the Effect is executed.
+  //
+  // Uncomment the line below to execute the Effect into
+  // a JavaScript Promise.
+  // Effect.runPromise
 )

@@ -1,4 +1,4 @@
-import { AiError, AiLanguageModel } from "@effect/ai"
+import { AiLanguageModel } from "@effect/ai"
 import { AmazonBedrockClient, AmazonBedrockLanguageModel } from "@effect/ai-amazon-bedrock"
 import { FetchHttpClient } from "@effect/platform"
 import { BunRuntime } from "@effect/platform-bun"
@@ -35,7 +35,7 @@ const ClaudeOpus = AmazonBedrockLanguageModel.model(
 )
 const Plan = ExecutionPlan.make({
   provide: ClaudeSonnet,
-  attempts: 2
+  attempts: 2,
 }, {
   provide: ClaudeOpus,
   attempts: 2
