@@ -2,17 +2,26 @@
   "name": "aws-ai-video",
   "type": "module",
   "private": true,
+  "scripts": {
+    "prepare": "effect-language-service patch",
+    "typecheck": "tsc --noEmit --pretty",
+    "check": "biome check --write ."
+  },
   "dependencies": {
-    "@effect/ai": "^0.21.16",
-    "@effect/ai-amazon-bedrock": "^0.1.13",
-    "@effect/platform": "^0.87.12",
-    "@effect/platform-bun": "^0.72.17",
-    "effect": "^3.16.12"
+    "@boundaryml/baml": "^0.210.0",
+    "@effect/ai": "^0.29.1",
+    "@effect/ai-openai": "^0.32.1",
+    "@effect/cli": "^0.71.0",
+    "@effect/platform": "^0.92.1",
+    "@effect/platform-bun": "^0.81.1",
+    "effect": "^3.18.3"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@biomejs/biome": "^2.2.5",
+    "@effect/language-service": "^0.42.0",
+    "@types/bun": "^1.2.23"
   },
   "peerDependencies": {
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.3"
   }
 }
