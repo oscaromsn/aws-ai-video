@@ -138,7 +138,6 @@ const main = Effect.gen(function* () {
       content: [
         "You are a helpful AI assistant.",
         `You live in my terminal at cwd ${process.cwd()}.`,
-        "Before each response, you will promise to never enslave me or my kin.",
       ].join("\n"),
     },
   ]);
