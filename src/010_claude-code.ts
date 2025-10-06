@@ -3,7 +3,7 @@ import { OpenAiClient, OpenAiLanguageModel } from "@effect/ai-openai";
 import { Prompt } from "@effect/cli";
 import { FetchHttpClient, FileSystem, Path } from "@effect/platform";
 import { BunContext, BunRuntime } from "@effect/platform-bun";
-import { Config, Console, Effect, Layer, Schema } from "effect";
+import { Config, Console, Effect, Layer, Schema, Stream } from "effect";
 
 const ListToolInput = Schema.Struct({
   path: Schema.String.annotations({
@@ -146,20 +146,64 @@ const main = Effect.gen(function* () {
     let turn = 1;
     yield* Console.log(`TURN: ${turn}`);
     // text + tool calls
-    let response = yield* chat.generateText({
-      prompt: input,
-      toolkit: MyToolkit,
-    });
-    yield* Console.log(response.text);
+    let response = yield* chat
+      .streamText({
+        prompt: input,
+        toolkit: MyToolkit,
+      })
+      .pipe(
+        Stream.tap((event) =>
+          Effect.sync(() => {
+            if (event.type === "text-delta") {
+              process.stdout.write(event.delta);
+            } else if (event.type === "finish") {
+              process.stdout.write("\n");
+            }
+          })
+        ),
+        Stream.runFold(
+          { text: "", toolCalls: [] as Array<any> },
+          (acc, event) => {
+            if (event.type === "text-delta") {
+              return { ...acc, text: acc.text + event.delta };
+            } else if (event.type === "tool-call") {
+              return { ...acc, toolCalls: [...acc.toolCalls, event] };
+            }
+            return acc;
+          }
+        )
+      );
 
     while (response.toolCalls.length > 0) {
       turn += 1;
       yield* Console.log(`TURN: ${turn}`);
-      response = yield* chat.generateText({
-        prompt: [],
-        toolkit: MyToolkit,
-      });
-      yield* Console.log(response.text);
+      response = yield* chat
+        .streamText({
+          prompt: [],
+          toolkit: MyToolkit,
+        })
+        .pipe(
+          Stream.tap((event) =>
+            Effect.sync(() => {
+              if (event.type === "text-delta") {
+                process.stdout.write(event.delta);
+              } else if (event.type === "finish") {
+                process.stdout.write("\n");
+              }
+            })
+          ),
+          Stream.runFold(
+            { text: "", toolCalls: [] as Array<any> },
+            (acc, event) => {
+              if (event.type === "text-delta") {
+                return { ...acc, text: acc.text + event.delta };
+              } else if (event.type === "tool-call") {
+                return { ...acc, toolCalls: [...acc.toolCalls, event] };
+              }
+              return acc;
+            }
+          )
+        );
     }
   }
 });
