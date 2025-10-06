@@ -5,25 +5,65 @@
     "target": "ESNext",
     "module": "Preserve",
     "moduleDetection": "force",
-    "jsx": "react-jsx",
-    "allowJs": true,
-
+    "allowJs": false,
     // Bundler mode
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "incremental": true,
+    // Emit controls
     "noEmit": true,
-
-    // Best practices
+    "verbatimModuleSyntax": true,
+    "removeComments": true,
+    "allowImportingTsExtensions": false,
+    // Strict type checking
     "strict": true,
     "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "useUnknownInCatchVariables": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noImplicitReturns": true,
     "noImplicitOverride": true,
-
-    // Some stricter flags (disabled by default)
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noPropertyAccessFromIndexSignature": false
-  }
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+    // Advanced strict checks
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "alwaysStrict": true,
+    // Additional strictness
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noPropertyAccessFromIndexSignature": false,
+    // Experimental
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    // Other
+    "composite": true,
+    "downlevelIteration": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": false,
+    "isolatedModules": true,
+    "noErrorTruncation": true,
+    "checkJs": false,
+    "forceConsistentCasingInFileNames": true,
+    // Path mapping
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@/types": ["types/index.ts"]
+    },
+    "plugins": [
+      {
+        "name": "@effect/language-service"
+      }
+    ]
+  },
+  "include": ["src/**/*", "tests/**/*", "types/**/*"],
+  "exclude": ["node_modules", "dist", "build", "coverage"]
 }
